@@ -19,44 +19,36 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       home: Scaffold(
-        // App bar //
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 83, 120, 255),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Date Text with a smaller font size and different font style
-              Text(
-                formattedDate,
-                style: GoogleFonts.lato(
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic, // Add some design to the font
+          // App bar //
+          appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 83, 120, 255),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Date Text with a smaller font size and different font style
+                Text(
+                  formattedDate,
+                  style: GoogleFonts.lato(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic, // Add some design to the font
+                  ),
                 ),
-              ),
 
-              Text(
-                'To Do List',
-                style: GoogleFonts.robotoCondensed(
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                Text(
+                  'To Do List',
+                  style: GoogleFonts.robotoCondensed(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-
-      body: ListView(
-        children: const [
-          TaskList(),
-          TaskList(),
-          TaskList()
-        ],
-      )
-
-      ),
+          body: ListView(
+            children: const [TaskList(), TaskList(), TaskList()],
+          )),
     );
   }
 }
-
