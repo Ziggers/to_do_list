@@ -23,24 +23,28 @@ class DialogBox extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: [
-                TextField(
+              TextField(
                 controller: controller,
-                decoration: const InputDecoration(border: OutlineInputBorder(),
-                hintText: "Create new task",
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Create new task",
                 ),
               ),
-              Row(children: [
-                //save
-                MyButton(onPressed: onSave,
-                text: "Save",
-                ),
+              Row(
+                children: [
+                  //save
+                  MyButton(
+                    onPressed: onSave,
+                    text: "Save",
+                  ),
 
-                MyButton(onPressed: onCancel,
-                text: "Cancel",
-                )
-                // cancel
-              ],)
-          
+                  MyButton(
+                    onPressed: onCancel,
+                    text: "Cancel",
+                  )
+                  // cancel
+                ],
+              )
             ],
           ),
         ),

@@ -8,6 +8,7 @@ class TaskTile extends StatefulWidget {
   final bool isSelected;
   final List<String> taskList;
   final Function(bool?)? onChanged;
+  final VoidCallback onDelete;
 
   const TaskTile({
     super.key,
@@ -15,6 +16,7 @@ class TaskTile extends StatefulWidget {
     required this.isSelected,
     required this.taskList,
     required this.onChanged,
+    required this.onDelete,
   });
 
   @override
@@ -22,59 +24,49 @@ class TaskTile extends StatefulWidget {
 }
 
 class _TaskTileState extends State<TaskTile> {
-  final _myBox = Hive.box('mybox');
-  ToDoDatabase db = ToDoDatabase();
-  final TextEditingController _editController = TextEditingController();
-  final TextEditingController _newTaskController = TextEditingController();
+  final _newTaskController = TextEditingController();
+  final _editController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    
-  }
-
-void _addSubtask() {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Add New Task'),
-      content: TextField(
-        controller: _newTaskController,
-        decoration: const InputDecoration(hintText: 'Enter new task'),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+  void _addSubtask() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add New Task'),
+        content: TextField(
+          controller: _newTaskController,
+          decoration: const InputDecoration(hintText: 'Enter new task'),
         ),
-        TextButton(
-          onPressed: () {
-            if (_newTaskController.text.isNotEmpty) {
-              setState(() {
-                widget.taskList.add(_newTaskController.text);
-                db.updateSubtask(widget.taskName, _newTaskController.text);
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (_newTaskController.text.isNotEmpty) {
+                setState(() {
+                  widget.taskList.add(_newTaskController.text);
+                });
                 _newTaskController.clear();
-
-              });
-            }
-            Navigator.pop(context);
-          },
-          child: const Text('Add'),
-        ),
-      ],
-    ),
-  );
-}
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _editSubtask(int index) {
     _editController.text = widget.taskList[index];
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit item'),
+        title: const Text('Edit Task'),
         content: TextField(
           controller: _editController,
-          decoration: const InputDecoration(hintText: 'Add item'),
+          decoration: const InputDecoration(hintText: 'Edit task'),
         ),
         actions: [
           TextButton(
@@ -126,6 +118,12 @@ void _addSubtask() {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Colors.grey, // Change delete button color to gray
+                  onPressed: widget.onDelete,
+                ),
               ],
             ),
             const Divider(thickness: 2),
@@ -141,11 +139,18 @@ void _addSubtask() {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
+                        color: Colors.grey, // Change edit button color to gray
                         onPressed: () => _editSubtask(index),
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete, size: 18),
-                        onPressed: () => setState(() => widget.taskList.removeAt(index)),
+                        color:
+                            Colors.grey, // Change delete button color to gray
+                        onPressed: () {
+                          setState(() {
+                            widget.taskList.removeAt(index);
+                          });
+                        },
                       ),
                     ],
                   ),
@@ -153,14 +158,15 @@ void _addSubtask() {
               },
             ),
             Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.add, size: 18),
-                    onPressed: _addSubtask,
-                  ),
-                  const Text("List item"),
-                ],
-              ),
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.add, size: 18),
+                  color: Colors.grey, // Change add button color to gray
+                  onPressed: _addSubtask,
+                ),
+                const Text("Add Subtask"),
+              ],
+            ),
           ],
         ),
       ),

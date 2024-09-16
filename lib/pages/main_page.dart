@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage> {
         DateFormat('EEEE, MMMM d').format(selectedDate);
 
     return Scaffold(
-      // App bar with gradient background and stylized title
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -103,7 +102,6 @@ class _HomePageState extends State<HomePage> {
         ),
         title: Stack(
           children: [
-            // Align 'To Do\'s' to the left
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -119,11 +117,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // Center the date in the middle and make it clickable
             Align(
               alignment: Alignment.center,
               child: GestureDetector(
-                onTap: _pickDate, // Open date picker on tap
+                onTap: _pickDate,
                 child: Text(
                   formattedDate,
                   style: GoogleFonts.lato(
@@ -137,15 +134,11 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
-      // Floating action button to add new tasks
       floatingActionButton: FloatingActionButton(
         onPressed: createTask,
         backgroundColor: Colors.deepPurple,
         child: const Icon(Icons.add, color: Colors.white),
       ),
-
-      // Body containing the list of tasks
       body: ListView.builder(
         itemCount: db.tileVal.length,
         itemBuilder: (context, index) {
@@ -154,6 +147,12 @@ class _HomePageState extends State<HomePage> {
             isSelected: db.tileVal[index][1],
             taskList: db.tileVal[index][2],
             onChanged: (value) => boxSelected(value, index),
+            onDelete: () {
+              setState(() {
+                db.tileVal.removeAt(index);
+              });
+              db.updateData();
+            },
           );
         },
       ),
