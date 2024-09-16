@@ -9,6 +9,7 @@ class TaskTile extends StatefulWidget {
   final List<String> taskList;
   final Function(bool?)? onChanged;
   final VoidCallback onDelete;
+  final VoidCallback onEdit; // Add this for editing the main task
 
   const TaskTile({
     super.key,
@@ -17,6 +18,7 @@ class TaskTile extends StatefulWidget {
     required this.taskList,
     required this.onChanged,
     required this.onDelete,
+    required this.onEdit, // Include the edit function here
   });
 
   @override
@@ -120,8 +122,13 @@ class _TaskTileState extends State<TaskTile> {
                 ),
                 const Spacer(),
                 IconButton(
+                  icon: const Icon(Icons.edit),
+                  color: Colors.grey, // Edit button with gray color
+                  onPressed: widget.onEdit, // Call onEdit when pressed
+                ),
+                IconButton(
                   icon: const Icon(Icons.delete),
-                  color: Colors.grey, // Change delete button color to gray
+                  color: Colors.grey, // Delete button with gray color
                   onPressed: widget.onDelete,
                 ),
               ],
@@ -139,13 +146,12 @@ class _TaskTileState extends State<TaskTile> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
-                        color: Colors.grey, // Change edit button color to gray
+                        color: Colors.grey, // Edit button for subtasks
                         onPressed: () => _editSubtask(index),
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete, size: 18),
-                        color:
-                            Colors.grey, // Change delete button color to gray
+                        color: Colors.grey, // Delete button for subtasks
                         onPressed: () {
                           setState(() {
                             widget.taskList.removeAt(index);
@@ -161,7 +167,7 @@ class _TaskTileState extends State<TaskTile> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.add, size: 18),
-                  color: Colors.grey, // Change add button color to gray
+                  color: Colors.grey, // Add button for subtasks
                   onPressed: _addSubtask,
                 ),
                 const Text("Add Subtask"),

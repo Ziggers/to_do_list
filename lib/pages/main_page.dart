@@ -56,6 +56,37 @@ class _HomePageState extends State<HomePage> {
     db.updateData();
   }
 
+  // Edit main task
+  void _editTask(int index) {
+    _controller.text = db.tileVal[index][0]; // Load current task name
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Task'),
+        content: TextField(
+          controller: _controller,
+          decoration: const InputDecoration(hintText: 'Edit task name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                db.tileVal[index][0] = _controller.text; // Save changes
+              });
+              db.updateData();
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Create a new task with a dialog
   void createTask() {
     showDialog(
@@ -143,16 +174,17 @@ class _HomePageState extends State<HomePage> {
         itemCount: db.tileVal.length,
         itemBuilder: (context, index) {
           return TaskTile(
-            taskName: db.tileVal[index][0],
-            isSelected: db.tileVal[index][1],
-            taskList: db.tileVal[index][2],
-            onChanged: (value) => boxSelected(value, index),
+            taskName: db.tileVal[index][0], // Task name
+            isSelected: db.tileVal[index][1], // Checkbox state
+            taskList: db.tileVal[index][2], // Subtask list
+            onChanged: (value) => boxSelected(value, index), // Checkbox toggle
             onDelete: () {
               setState(() {
-                db.tileVal.removeAt(index);
+                db.tileVal.removeAt(index); // Delete task
               });
               db.updateData();
             },
+            onEdit: () => _editTask(index), // Edit main task
           );
         },
       ),
